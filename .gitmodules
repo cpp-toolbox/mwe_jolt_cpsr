@@ -1,0 +1,87 @@
+[submodule "src/utility/rate_limited_function"]
+	path = client/src/utility/rate_limited_function
+	url = git@github.com:cpp-toolbox/rate_limited_function.git
+[submodule "src/utility/periodic_signal"]
+	path = client/src/utility/periodic_signal
+	url = git@github.com:cpp-toolbox/periodic_signal.git
+[submodule "scripts"]
+	path = client/scripts
+	url = git@github.com:cpp-toolbox/scripts.git
+[submodule "client/src/networking/client_networking"]
+	path = client/src/networking/client_networking
+	url = git@github.com:cpp-toolbox/client_networking.git
+[submodule "client/src/utility/logger_component"]
+	path = client/src/utility/logger_component
+	url = git@github.com:cpp-toolbox/logger_component.git
+[submodule "server/scripts"]
+	path = server/scripts
+	url = git@github.com:cpp-toolbox/scripts.git
+[submodule "server/src/networking/server_networking"]
+	path = server/src/networking/server_networking
+	url = git@github.com:cpp-toolbox/server_networking.git
+[submodule "server/src/utility/logger_component"]
+	path = server/src/utility/logger_component
+	url = git@github.com:cpp-toolbox/logger_component.git
+[submodule "server/src/utility/fixed_frequency_loop"]
+	path = server/src/utility/fixed_frequency_loop
+	url = git@github.com:cpp-toolbox/fixed_frequency_loop.git
+[submodule "server/src/utility/stopwatch"]
+	path = server/src/utility/stopwatch
+	url = git@github.com:cpp-toolbox/stopwatch.git
+[submodule "client/src/utility/fixed_frequency_loop"]
+	path = client/src/utility/fixed_frequency_loop
+	url = git@github.com:cpp-toolbox/fixed_frequency_loop.git
+[submodule "client/src/utility/stopwatch"]
+	path = client/src/utility/stopwatch
+	url = git@github.com:cpp-toolbox/stopwatch.git
+[submodule "server/src/utility/periodic_signal"]
+	path = server/src/utility/periodic_signal
+	url = git@github.com:cpp-toolbox/periodic_signal.git
+[submodule "server/src/utility/--force"]
+	path = server/src/utility/--force
+	url = git@github.com:cpp-toolbox/fixed_frequency_processor.git
+[submodule "client/src/utility/fixed_frequency_reprocessor"]
+	path = client/src/utility/fixed_frequency_reprocessor
+	url = git@github.com:cpp-toolbox/fixed_frequency_reprocessor.git
+[submodule "server/src/utility/fixed_frequency_processor"]
+	path = server/src/utility/fixed_frequency_processor
+	url = git@github.com:cpp-toolbox/fixed_frequency_processor.git
+[submodule "client/src/utility/limited_vector"]
+	path = client/src/utility/limited_vector
+	url = git@github.com:cpp-toolbox/limited_vector.git
+[submodule "client/assets/shaders"]
+	path = client/assets/shaders
+	url = git@github.com:cpp-toolbox/shaders.git
+[submodule "client/src/graphics/batcher"]
+	path = client/src/graphics/batcher
+	url = git@github.com:cpp-toolbox/batcher.git
+[submodule "client/src/graphics/vertex_geometry"]
+	path = client/src/graphics/vertex_geometry
+	url = git@github.com:cpp-toolbox/vertex_geometry.git
+[submodule "client/src/graphics/shader_standard"]
+	path = client/src/graphics/shader_standard
+	url = git@github.com:cpp-toolbox/shader_standard.git
+[submodule "client/src/graphics/shader_cache"]
+	path = client/src/graphics/shader_cache
+	url = git@github.com:cpp-toolbox/shader_cache.git
+[submodule "client/src/graphics/window"]
+	path = client/src/graphics/window
+	url = git@github.com:cpp-toolbox/window.git
+[submodule "client/src/graphics/transform"]
+	path = client/src/graphics/transform
+	url = git@github.com:cpp-toolbox/transform.git
+[submodule "client/src/graphics/glfw_lambda_callback_manager"]
+	path = client/src/graphics/glfw_lambda_callback_manager
+	url = git@github.com:cpp-toolbox/glfw_lambda_callback_manager.git
+[submodule "client/src/utility/input_state"]
+	path = client/src/utility/input_state
+	url = git@github.com:cpp-toolbox/input_state.git
+[submodule "client/src/utility/temporal_binary_signal"]
+	path = client/src/utility/temporal_binary_signal
+	url = git@github.com:cpp-toolbox/temporal_binary_signal.git
+[submodule "client/src/utility/expiring_temporal_vector"]
+	path = client/src/utility/expiring_temporal_vector
+	url = git@github.com:cpp-toolbox/expiring_temporal_vector.git
+[submodule "server/src/utility/transform"]
+	path = server/src/utility/transform
+	url = git@github.com:cpp-toolbox/transform.git
