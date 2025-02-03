@@ -85,3 +85,27 @@
 [submodule "server/src/utility/transform"]
 	path = server/src/utility/transform
 	url = git@github.com:cpp-toolbox/transform.git
+[submodule "client/src/system_logic/physics"]
+	path = client/src/system_logic/physics
+	url = git@github.com:cpp-toolbox/physics.git
+[submodule "client/src/graphics/draw_info"]
+	path = client/src/graphics/draw_info
+	url = git@github.com:cpp-toolbox/draw_info.git
+[submodule "client/src/utility/unique_id_generator"]
+	path = client/src/utility/unique_id_generator
+	url = git@github.com:cpp-toolbox/unique_id_generator.git
+[submodule "client/src/utility/jolt_glm_type_conversions"]
+	path = client/src/utility/jolt_glm_type_conversions
+	url = git@github.com:cpp-toolbox/jolt_glm_type_conversions.git
+[submodule "server/src/system_logic/physics"]
+	path = server/src/system_logic/physics
+	url = git@github.com:cpp-toolbox/physics.git
+[submodule "server/src/graphics/draw_info"]
+	path = server/src/graphics/draw_info
+	url = git@github.com:cpp-toolbox/draw_info.git
+[submodule "server/src/utility/unique_id_generator"]
+	path = server/src/utility/unique_id_generator
+	url = git@github.com:cpp-toolbox/unique_id_generator.git
+[submodule "server/src/utility/jolt_glm_type_conversions"]
+	path = server/src/utility/jolt_glm_type_conversions
+	url = git@github.com:cpp-toolbox/jolt_glm_type_conversions.git

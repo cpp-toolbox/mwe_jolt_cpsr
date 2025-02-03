@@ -11,4 +11,6 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 
 find_package(spdlog)
 find_package(enet)
-target_link_libraries(${PROJECT_NAME} spdlog::spdlog enet::enet)
+find_package(Jolt)
+find_package(glm)
+target_link_libraries(${PROJECT_NAME} spdlog::spdlog enet::enet Jolt::Jolt glm::glm)

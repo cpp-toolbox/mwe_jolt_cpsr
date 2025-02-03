@@ -5,6 +5,8 @@
 #include "utility/transform/transform.hpp"
 #include <format>
 #include <string>
+#include "system_logic/physics/physics.hpp"
+#include "utility/jolt_glm_type_conversions/jolt_glm_type_conversions.hpp"
 
 struct GameUpdate {
     double position_x;
@@ -45,6 +47,11 @@ void p(std::string s) {
 }
 
 int main() {
+
+    Physics physics;
+    physics.create_character(0);
+    JPH::Ref<JPH::CharacterVirtual> physics_character = physics.client_id_to_physics_character[0];
+
     auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
     console_sink->set_level(spdlog::level::debug);
     auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("network_logs.txt", true);
@@ -89,12 +96,15 @@ int main() {
 
         p(std::format("Input Vector: ({}, {})", input_vector.x, input_vector.y));
 
-        current_velocity += input_vector * acceleration * static_cast<float>(dt);
-        current_velocity *= friction;
+        glm::vec3 input_vector_3d(input_vector, 0);
 
-        glm::vec3 xy_velocity(current_velocity, 0);
-        transform.position += xy_velocity * static_cast<float>(dt);
-
+        auto new_velocity =
+            physics_character->GetLinearVelocity() + g2j(input_vector_3d * acceleration * static_cast<float>(dt));
+        new_velocity *= friction;
+        physics_character->SetLinearVelocity(new_velocity);
+        current_velocity = j2g(physics_character->GetLinearVelocity());
+        physics.update_specific_character(dt, physics_character);
+        transform.position = j2g(physics_character->GetPosition());
         p(std::format("processing id: {} with dt: {} new position: {}", id, dt, transform.get_string_repr()));
     };
 

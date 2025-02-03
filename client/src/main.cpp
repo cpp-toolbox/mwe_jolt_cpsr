@@ -5,6 +5,8 @@
 #include "graphics/batcher/generated/batcher.hpp"
 #include "graphics/glfw_lambda_callback_manager/glfw_lambda_callback_manager.hpp"
 
+#include "system_logic/physics/physics.hpp"
+
 #include "networking/client_networking/network.hpp"
 
 #include <GLFW/glfw3.h>
@@ -16,8 +18,8 @@
 #include "utility/periodic_signal/periodic_signal.hpp"
 #include "utility/input_state/input_state.hpp"
 #include "utility/rate_limited_function/rate_limited_function.hpp"
+#include "utility/jolt_glm_type_conversions/jolt_glm_type_conversions.hpp"
 
-//
 #include <GLFW/glfw3.h>
 #include <iostream>
 
@@ -61,6 +63,19 @@ void p(std::string s) {
 
 int main() {
 
+    Physics physics;
+
+    uint64_t cpsr_character_id = 0;
+    physics.create_character(cpsr_character_id);
+    JPH::Ref<JPH::CharacterVirtual> cpsr_character = physics.client_id_to_physics_character[cpsr_character_id];
+
+    uint64_t client_only_id = 1;
+    physics.create_character(client_only_id);
+    JPH::Ref<JPH::CharacterVirtual> client_only_character = physics.client_id_to_physics_character[client_only_id];
+
+    physics.create_character(2);
+    JPH::Ref<JPH::CharacterVirtual> server_only_character = physics.client_id_to_physics_character[2];
+
     unsigned int screen_width_px = 800;
     unsigned int screen_height_px = 800;
     bool start_in_fullscreen = false;
@@ -75,7 +90,6 @@ int main() {
     float friction = 0.99;
     glm::vec2 current_velocity(0);
 
-    std::unordered_map<int, glm::vec2> id_to_velocity;
     std::unordered_map<int, glm::vec2> id_to_position;
     std::unordered_map<int, KeyboardUpdate> id_to_keyboard_update;
 
@@ -125,15 +139,21 @@ int main() {
                                static_cast<int>(ku.forward_pressed) - static_cast<int>(ku.backwards_pressed));
         std::string result = std::format("Input Vector: ({}, {})", input_vector.x, input_vector.y);
         p(result);
-        current_velocity += input_vector * acceleration * static_cast<float>(dt);
-        current_velocity *= friction;
+
+        glm::vec3 input_vector_3d(input_vector, 0);
+        auto new_velocity =
+            cpsr_character->GetLinearVelocity() + g2j(input_vector_3d * acceleration * static_cast<float>(dt));
+        new_velocity *= friction;
+        cpsr_character->SetLinearVelocity(new_velocity);
+        current_velocity = j2g(cpsr_character->GetLinearVelocity());
+        physics.update_specific_character(dt, cpsr_character);
+        transform.position = j2g(cpsr_character->GetPosition());
         p(std::format("Before processing: Client ID: {} with dt: {} - Position: ({}, {})", id, dt, transform.position.x,
                       transform.position.y));
-        glm::vec3 xy_velocity(current_velocity, 0);
-        transform.position += xy_velocity * (float)dt;
 
         if (not reprocessing_call) {
-            client_only_transform.position += xy_velocity * (float)dt;
+            physics.update_specific_character(dt, client_only_character);
+            client_only_transform.position = j2g(client_only_character->GetLinearVelocity());
         }
 
         id_to_position[id] = transform.position;
@@ -158,8 +178,8 @@ int main() {
     FixedFrequencyReprocessor client_physics(60, client_process, reprocess_function);
     PeriodicSignal send_signal(60);
 
-    std::vector<glm::vec3> square_vertices = generate_square_vertices(0, 0, .5);
-    std::vector<unsigned int> square_indices = generate_square_indices();
+    std::vector<glm::vec3> square_vertices = vertex_geometry::generate_square_vertices(0, 0, .5);
+    std::vector<unsigned int> square_indices = vertex_geometry::generate_square_indices();
 
     shader_cache.set_uniform(ShaderType::CWL_V_TRANSFORMATION_WITH_SOLID_COLOR, ShaderUniformVariable::CAMERA_TO_CLIP,
                              glm::mat4(1.0f));
@@ -219,8 +239,11 @@ int main() {
                             last_received_game_update.position_x, last_received_game_update.position_y);
             p(result);
 
-            server_only_transform.position.x = last_received_game_update.position_x;
-            server_only_transform.position.y = last_received_game_update.position_y;
+            JPH::Vec3 server_pos(last_received_game_update.position_x, last_received_game_update.position_y, 0);
+            server_only_character->SetPosition(server_pos);
+            server_only_transform.position = j2g(server_only_character->GetPosition());
+            /*server_only_transform.position.x = last_received_game_update.position_x;*/
+            /*server_only_transform.position.y = last_received_game_update.position_y;*/
 
             result = std::format("predicted position was: ({}, {}) now setting position to ({}, {})",
                                  transform.position.x, transform.position.y, last_received_game_update.position_x,
@@ -231,10 +254,16 @@ int main() {
             double predicted_position_x = transform.position.x;
             double predicted_position_y = transform.position.y;
             // slam it in
-            transform.position.x = last_received_game_update.position_x;
-            transform.position.y = last_received_game_update.position_y;
-            current_velocity.x = last_received_game_update.velocity_x;
-            current_velocity.y = last_received_game_update.velocity_y;
+            cpsr_character->SetPosition(server_pos);
+            transform.position = j2g(cpsr_character->GetPosition());
+            /*transform.position.x = last_received_game_update.position_x;*/
+            /*transform.position.y = last_received_game_update.position_y;*/
+            JPH::Vec3 server_vel(last_received_game_update.velocity_x, last_received_game_update.velocity_y, 0);
+            cpsr_character->SetLinearVelocity(server_vel);
+            // could use the characters vel
+            current_velocity.x = cpsr_character->GetLinearVelocity().GetX();
+            current_velocity.y = cpsr_character->GetLinearVelocity().GetY();
+            // TODO: was about to go put jolt on the server and continue onward.
             // reconcile
             client_physics.re_process_after_id(last_received_game_update.last_id_used_to_produce_this_update);
 
