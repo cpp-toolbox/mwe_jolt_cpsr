@@ -127,7 +127,7 @@ int main() {
     std::vector<spdlog::sink_ptr> sinks = {console_sink, file_sink};
     std::string local_network = "localhost";
     std::string ubuntu_sfo = "147.182.197.23";
-    Network network(ubuntu_sfo, 7777, sinks);
+    Network network(local_network, 7777, sinks);
     network.initialize_network();
     network.attempt_to_connect_to_server();
 
@@ -152,6 +152,7 @@ int main() {
                       transform.position.y));
 
         if (not reprocessing_call) {
+            client_only_character->SetLinearVelocity(new_velocity);
             physics.update_specific_character(dt, client_only_character);
             client_only_transform.position = j2g(client_only_character->GetLinearVelocity());
         }
